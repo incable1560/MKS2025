@@ -75,7 +75,6 @@ void Error_Handler(void);
 #define B1_GPIO_Port GPIOC
 #define S2_Pin LL_GPIO_PIN_0
 #define S2_GPIO_Port GPIOC
-#define S2_EXTI_IRQn EXTI0_1_IRQn
 #define S1_Pin LL_GPIO_PIN_1
 #define S1_GPIO_Port GPIOC
 #define USART_TX_Pin LL_GPIO_PIN_2
@@ -102,7 +101,7 @@ void Error_Handler(void);
 #define NVIC_PRIORITYGROUP_3         ((uint32_t)0x00000004) /*!< 3 bits for pre-emption priority,
                                                                  1 bit  for subpriority */
 #define NVIC_PRIORITYGROUP_4         ((uint32_t)0x00000003) /*!< 4 bits for pre-emption priority,
-                                                                0 bit  for subpriority */
+                                                                 0 bit  for subpriority */
 #endif
 
 /* USER CODE BEGIN Private defines */
