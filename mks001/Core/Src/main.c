@@ -68,20 +68,23 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-/* void blink(void)
+	 void blink(void)
 	 {
 	 static uint32_t delay;
 
 	 if (Tick > delay + LED_TIME_BLINK) {
-	 LL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-	 delay = Tick;
+		 LL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+		 delay = Tick;
 	 }
-	 } */
+	 }
+
 	void button(void)
 	{
-		 static uint32_t old_s1;
 		 static uint32_t off_time;
+		 static uint32_t old_s1;
 		 uint32_t new_s1 = LL_GPIO_IsInputPinSet(S1_GPIO_Port, S1_Pin);
+		 static uint32_t old_s2;
+		 uint32_t new_s2 = LL_GPIO_IsInputPinSet(S2_GPIO_Port, S2_Pin);
 
 		 if (old_s1 && !new_s1) { // falling edge
 			 off_time = Tick + LED_TIME_LONG;
@@ -89,6 +92,18 @@ int main(void)
 		 }
 		 old_s1 = new_s1;
 
+
+		 if (Tick > off_time) {
+			 LL_GPIO_ResetOutputPin(LED2_GPIO_Port, LED2_Pin);
+		 }
+
+
+
+		 if (old_s2 && !new_s2) { // falling edge
+			 off_time = Tick + LED_TIME_SHORT;
+		 	 LL_GPIO_SetOutputPin(LED2_GPIO_Port, LED2_Pin);
+		 }
+		 old_s2 = new_s2;
 
 		 if (Tick > off_time) {
 			 LL_GPIO_ResetOutputPin(LED2_GPIO_Port, LED2_Pin);
@@ -129,7 +144,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  /* blink(); */
+	  blink();
 	  button();
 
   }
@@ -288,7 +303,7 @@ static void MX_GPIO_Init(void)
   /**/
   GPIO_InitStruct.Pin = S1_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
   LL_GPIO_Init(S1_GPIO_Port, &GPIO_InitStruct);
 
   /**/
