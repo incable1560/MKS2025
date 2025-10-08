@@ -8,11 +8,54 @@
 #include "sct.h"
 #include "main.h"
 
+static const uint32_t reg_values[3][10] = {
+{
+//PCDE--------GFAB @ DIS1
+0b0111000000000111 << 16,
+0b0100000000000001 << 16,
+0b0011000000001011 << 16,
+0b0110000000001011 << 16,
+0b0100000000001101 << 16,
+0b0110000000001110 << 16,
+0b0111000000001110 << 16,
+0b0100000000000011 << 16,
+0b0111000000001111 << 16,
+0b0110000000001111 << 16,
+},
+{
+//----PCDEGFAB---- @ DIS2
+0b0000011101110000 << 0,
+0b0000010000010000 << 0,
+0b0000001110110000 << 0,
+0b0000011010110000 << 0,
+0b0000010011010000 << 0,
+0b0000011011100000 << 0,
+0b0000011111100000 << 0,
+0b0000010000110000 << 0,
+0b0000011111110000 << 0,
+0b0000011011110000 << 0,
+},
+{
+//PCDE--------GFAB @ DIS3
+0b0111000000000111 << 0,
+0b0100000000000001 << 0,
+0b0011000000001011 << 0,
+0b0110000000001011 << 0,
+0b0100000000001101 << 0,
+0b0110000000001110 << 0,
+0b0111000000001110 << 0,
+0b0100000000000011 << 0,
+0b0111000000001111 << 0,
+0b0110000000001111 << 0,
+},
+};
+
+
 void sct_init(void)
 {
 	sct_led(0);
+	sct_value(0);
 }
-
 void sct_led(uint32_t value)
 {
     // Odesíláme 32 bitů, od LSB po MSB
@@ -35,4 +78,22 @@ void sct_led(uint32_t value)
     // Puls na /LA (latch), aby se data přenesla do výstupního registru
     HAL_GPIO_WritePin(SCT_NLA_GPIO_Port, SCT_NLA_Pin, 1);
     HAL_GPIO_WritePin(SCT_NLA_GPIO_Port, SCT_NLA_Pin, 0);
+}
+
+void sct_value(uint16_t value)
+{
+    uint32_t reg = 0;
+
+    // Spočítej jednotlivé cifry
+    uint8_t hundreds = (value / 100) % 10;
+    uint8_t tens     = (value / 10) % 10;
+    uint8_t ones     = value % 10;
+
+    // Slož bitový vzor (pomocí OR)
+    reg |= reg_values[0][hundreds];
+    reg |= reg_values[1][tens];
+    reg |= reg_values[2][ones];
+
+    // Pošli na LEDky
+    sct_led(reg);
 }

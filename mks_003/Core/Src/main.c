@@ -68,7 +68,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+	uint16_t value = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -91,9 +91,8 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+
   sct_init();
-  sct_led(0x7A5C36DE);
-  HAL_Delay(1000);
 
   /* USER CODE END 2 */
 
@@ -104,6 +103,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+	    sct_value(value);
+	    HAL_Delay(500);
+
+	    value += 111;
+	    if (value > 999)
+	        value = 0;
   }
   /* USER CODE END 3 */
 }
